@@ -52,6 +52,12 @@ def deposito(saldo, extrato, /):
 
     return saldo, extrato
 
+def exibir_extrato(saldo,/, *, extrato):
+    print("\n================ EXTRATO ================")
+    print("Não foram realizadas movimentações." if not extrato else extrato)
+    print(f"\nSaldo: R$ {saldo:.2f}")
+    print("==========================================")
+
 while True:
 
     opcao = input(menu)
@@ -64,10 +70,7 @@ while True:
        saldo, extrato = deposito(saldo, extrato)
 
     elif opcao == "e":
-        print("\n================ EXTRATO ================")
-        print("Não foram realizadas movimentações." if not extrato else extrato)
-        print(f"\nSaldo: R$ {saldo:.2f}")
-        print("==========================================")
+        exibir_extrato(saldo, extrato=extrato)
 
     elif opcao == "q":
         break
