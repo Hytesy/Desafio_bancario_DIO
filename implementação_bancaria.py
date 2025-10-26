@@ -3,10 +3,11 @@ menu = """
 [s] Sacar
 [d] Depositar
 [e] Extrato
+[c] Criar conta
 [q] Sair
 
 => """
-
+dados_usuario = []
 saldo = 0
 limite = 500
 extrato = ""
@@ -58,6 +59,27 @@ def exibir_extrato(saldo,/, *, extrato):
     print(f"\nSaldo: R$ {saldo:.2f}")
     print("==========================================")
 
+def cadastrar_usuario(dados_usuarios):
+    cpf = input("Por gentileza, informe o seu CPF: ")
+
+
+    for usuario in dados_usuarios:
+        if cpf == usuario["cpf"]:
+            print("Já existe um usuário utilizando este CPF")
+            return dados_usuarios
+        
+    nome = input("Por gentileza, informe o seu nome completo: ")
+    data_nascimento = input("Digite a data de nascimento (DD/MM/AAAA): ")
+    rua = input("Informe sua rua/logradouro: ")
+    numero = input("Número de rêsidencia: ")
+    bairro = input("Bairro: ")
+    cidade = input("Cidade: ")
+    uf = input("Sigla de seu estado: ")
+    dados_usuarios.append({"nome": nome.title(), "nascimento": data_nascimento, "cpf": cpf, "endereço": f"{rua.title()}, {numero} - {bairro.title()} - {cidade}/{uf.upper()}"})
+
+    print(dados_usuarios)
+    return dados_usuarios
+
 while True:
 
     opcao = input(menu)
@@ -71,6 +93,9 @@ while True:
 
     elif opcao == "e":
         exibir_extrato(saldo, extrato=extrato)
+
+    elif opcao == "c":
+        dados_usuario = cadastrar_usuario(dados_usuario)
 
     elif opcao == "q":
         break
