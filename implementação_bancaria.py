@@ -3,11 +3,13 @@ menu = """
 [s] Sacar
 [d] Depositar
 [e] Extrato
+[u] Criar usuario
 [c] Criar conta
 [q] Sair
 
 => """
 dados_usuario = []
+contas = []
 saldo = 0
 limite = 500
 extrato = ""
@@ -35,7 +37,7 @@ def saque(*, saldo, limite, extrato, numero_saques):
         print(f"Sucesso! Você realizou o saque no valor de R$ {valor:.2f}\n")
 
     else:
-        print("Operação falhou! O valor informado é inválido.")
+        print("Operação falhou! O valor informado é inválido. \n")
 
     return saldo, extrato, numero_saques
 
@@ -60,8 +62,7 @@ def exibir_extrato(saldo,/, *, extrato):
     print("==========================================")
 
 def cadastrar_usuario(dados_usuarios):
-    cpf = input("Por gentileza, informe o seu CPF: ")
-
+    cpf = int(input("Por gentileza, informe o seu CPF: "))
 
     for usuario in dados_usuarios:
         if cpf == usuario["cpf"]:
@@ -75,10 +76,30 @@ def cadastrar_usuario(dados_usuarios):
     bairro = input("Bairro: ")
     cidade = input("Cidade: ")
     uf = input("Sigla de seu estado: ")
-    dados_usuarios.append({"nome": nome.title(), "nascimento": data_nascimento, "cpf": cpf, "endereço": f"{rua.title()}, {numero} - {bairro.title()} - {cidade}/{uf.upper()}"})
 
-    print(dados_usuarios)
+    dados_usuarios.append({"nome": nome.title(), "nascimento": data_nascimento, "cpf": cpf, "endereço": f"{rua.title()}, {numero} - {bairro.title()} - {cidade.title()}/{uf.upper()}"})
+    print(f"Agradecemos pelo cadastro!")
+
     return dados_usuarios
+
+def criar_conta(dados_usuarios, conta):
+    cliente = int(input("\n Por gentileza, informe o seu CPF: "))
+    usuario_encontrado = None
+
+    for usuario in dados_usuarios:
+        if cliente == usuario["cpf"]:
+            usuario_encontrado = usuario
+            break   
+
+    if usuario_encontrado:
+        agencia = "0001"
+        numero_conta = len(conta) + 1
+        conta.append({"usuario": cliente, "agencia": agencia, "numero_conta": numero_conta})
+        print(f"A conta {numero_conta}, foi criada com sucesso! \n")
+    else:
+        print(f"Usuário não encontrado, verifique se digitou corretamente, ou crie um. \n")
+    
+    return dados_usuarios, conta
 
 while True:
 
@@ -94,11 +115,13 @@ while True:
     elif opcao == "e":
         exibir_extrato(saldo, extrato=extrato)
 
-    elif opcao == "c":
+    elif opcao == "u":
         dados_usuario = cadastrar_usuario(dados_usuario)
+
+    elif opcao == "c":
+        dados_usuario, contas = criar_conta(dados_usuario, contas)
 
     elif opcao == "q":
         break
-
     else:
         print("Operação inválida, por favor selecione novamente a operação desejada.")
